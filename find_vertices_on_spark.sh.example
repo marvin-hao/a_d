@@ -1,0 +1,26 @@
+#!/bin/bash
+
+SPARK_URL="spark://hostname:7077"
+SPARK_BIN="spark-3.0.3-bin-hadoop2.7/bin/spark-submit"
+SPARK_WORK="spark-3.0.3-bin-hadoop2.7/work"
+DIM=7
+START=1
+END=64
+LOAD_DIR="a_d/a_$DIM"
+
+mkdir -p $LOAD_DIR
+
+for i in $(seq $START $END)
+do
+        PREV=$((i-1))
+        eval $"$SPARK_BIN --master $SPARK_URL \
+        --conf spark.pyspark.driver.python=python3.6 \
+        --conf spark.pyspark.python=python3.6 \
+        --conf spark.driver.maxResultSize=0 \
+        --driver-memory 4g \
+        --executor-memory 4g \
+        --files \"$LOAD_DIR/$PREV.*\" \
+        --py-files find_vertices.pyx \
+        find_vertices_on_spark.py $DIM $i $SAVE_DIR"
+        rm -r $SPARK_WORK/*
+done
