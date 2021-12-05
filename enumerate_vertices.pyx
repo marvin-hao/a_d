@@ -146,6 +146,7 @@ def decomposable(point: Point) -> DecompResult:
 			n_ones += 1
 		g_copy >>= 1
 
+	# Lemma 3.8
 	for i in path:
 		if i >= g:
 			break
@@ -426,6 +427,7 @@ def process_per_layer(prev_layer: List[Tuple[np.ndarray, str]], d: int, concurre
 	total_vertices = 0
 
 	def handle_result(local_vertices):
+		# L_{k+1}(G) ← L_{k+1}(G) ∪ {S ∪ {g^j}}
 		vertices.update(local_vertices)
 		pbar.update(1)
 		del local_vertices
@@ -542,6 +544,8 @@ def run(d: int, n_worker: int, checkpoint: List[Point]):
 		n_processor = cpu_count()
 	else:
 		n_processor = n_worker
+
+	# Algorithm 3
 	try:
 		if len(checkpoint) > 0:
 			layer = [(e.p, ','.join(map(str, e.path))) for e in checkpoint]

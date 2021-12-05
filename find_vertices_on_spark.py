@@ -100,6 +100,8 @@ def main():
 	# bundle_size = 128
 	concurrency = math.ceil(len(loaded) / bundle_size)
 	vertices = spark.sparkContext.parallelize(loaded, concurrency)
+
+	# Implementation of Algorithm 3 as a pipeline
 	task = vertices.mapPartitions(
 		lambda p_list: find_vertices(p_list, dim)
 	).reduceByKey(

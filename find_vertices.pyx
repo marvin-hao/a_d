@@ -75,7 +75,7 @@ def decomposable(path_in, short g, short d) -> bool:
 			n_ones += 1
 		g_copy >>= 1
 
-	# print('******')
+	# Lemma 3.8
 	for i in path:
 		if i >= g:
 			break
